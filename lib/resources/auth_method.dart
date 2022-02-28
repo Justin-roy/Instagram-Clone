@@ -11,10 +11,10 @@ class AuthMethods {
   // For Getting Users Details
   Future<CustomUser> getUserDetails() async {
     User currentUser = _auth.currentUser!;
-    print('Current Id: ${currentUser.uid}\n');
+    // print('Current Id: ${currentUser.uid}\n');
     DocumentSnapshot snap =
         await _firestore.collection('users').doc(currentUser.uid).get();
-    print('SnapShot Data: ${snap.data()}');
+    //print('SnapShot Data: ${snap.data()}');
     return CustomUser.fromSnap(snap);
   }
 
@@ -39,7 +39,7 @@ class AuthMethods {
         //Getting & Uploading Url From Firebase Storage
         String imageUrl = await StorageMethods()
             .uploadImageToStorage('ProfilePics', file, false);
-        // Adding rest data to firebase database
+        // Now Adding all data to firebase database
         CustomUser user = CustomUser(
           username: username,
           uid: cred.user!.uid,
@@ -52,7 +52,7 @@ class AuthMethods {
         await _firestore.collection('users').doc(cred.user!.uid).set(
               user.toJson(),
             );
-        res = 'Success';
+        res = 'Success'; //returning Success (Added to firebase)
       }
     } catch (err) {
       res = err.toString();

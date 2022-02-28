@@ -6,9 +6,9 @@ pickImage(ImageSource imageSource) async {
   XFile? _file = await _picker.pickImage(source: imageSource);
   if (_file != null) {
     return await _file.readAsBytes();
+  } else {
+    return;
   }
-  // ignore: avoid_print
-  print('No Image Selected');
 }
 
 showSnackBar(String message, BuildContext context) {

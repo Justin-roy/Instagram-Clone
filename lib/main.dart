@@ -12,6 +12,7 @@ import 'package:provider/provider.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  //This Config is required for web
   if (kIsWeb) {
     await Firebase.initializeApp(
       options: const FirebaseOptions(
