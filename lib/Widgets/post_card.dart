@@ -3,6 +3,7 @@ import 'package:instagram_clone/Widgets/like_animation.dart';
 import 'package:instagram_clone/models/users.dart';
 import 'package:instagram_clone/providers/user_provider.dart';
 import 'package:instagram_clone/resources/firebase_method.dart';
+import 'package:instagram_clone/screens/comment_screen.dart';
 import 'package:instagram_clone/utils/colors.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
@@ -49,7 +50,7 @@ class _PostCardState extends State<PostCard> {
                 itemBuilder: (context) => [
                   const PopupMenuItem(
                     child: Text(
-                      'Report',
+                      'Delete',
                       style: TextStyle(color: Colors.red),
                     ),
                   ),
@@ -141,7 +142,16 @@ class _PostCardState extends State<PostCard> {
               ),
               const SizedBox(width: 10),
               IconButton(
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => CommentScreen(
+                        snap: widget.snap,
+                      ),
+                    ),
+                  );
+                },
                 icon: const Icon(
                   Icons.comment,
                 ),

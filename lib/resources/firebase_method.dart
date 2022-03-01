@@ -64,4 +64,39 @@ class FirebaseMethod {
       print(err.toString());
     }
   }
+
+  // For Storing Comments..
+  Future<String> postComment({
+    required String postId,
+    required String text,
+    required String uid,
+    required String name,
+    required String profilePic,
+  }) async {
+    String res = 'some error occured';
+    try {
+      if (text.isNotEmpty) {
+        String commentId = const Uuid().v1();
+        await _firestore
+            .collection('post')
+            .doc(postId)
+            .collection('comment')
+            .doc(commentId)
+            .set({
+          'profileImg': profilePic,
+          'uid': uid,
+          'username': name,
+          'comment': text,
+          'postId': postId,
+          'commentId': commentId,
+          'datePublished': DateTime.now(),
+        });
+      } else {
+        res = 'Text is Empty';
+      }
+    } catch (err) {
+      res = err.toString();
+    }
+    return res;
+  }
 }
