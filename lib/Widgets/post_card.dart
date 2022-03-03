@@ -1,3 +1,5 @@
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:instagram_clone/Widgets/like_animation.dart';
 import 'package:instagram_clone/models/users.dart';
@@ -5,8 +7,10 @@ import 'package:instagram_clone/providers/user_provider.dart';
 import 'package:instagram_clone/resources/firebase_method.dart';
 import 'package:instagram_clone/screens/comment_screen.dart';
 import 'package:instagram_clone/utils/colors.dart';
+import 'package:instagram_clone/utils/utils.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
+import 'package:share_plus/share_plus.dart';
 
 class PostCard extends StatefulWidget {
   final snap;
@@ -18,6 +22,41 @@ class PostCard extends StatefulWidget {
 
 class _PostCardState extends State<PostCard> {
   bool _isAnimation = false;
+  int commentLength = 0;
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+
+  //Deleting Post
+  _deletePost() async {
+    await _firestore
+        .collection('post')
+        .doc(widget.snap['postId'])
+        .delete()
+        .onError((error, stackTrace) => (err) {
+              print(err.toString());
+            });
+  }
+
+  @override
+  void initState() {
+    _getAllComment();
+    super.initState();
+  }
+
+  //Getting Comment Length..
+  _getAllComment() async {
+    try {
+      QuerySnapshot qSnap = await _firestore
+          .collection('post')
+          .doc(widget.snap['postId'])
+          .collection('comment')
+          .get();
+      commentLength = qSnap.docs.length;
+    } on FirebaseException catch (err) {
+      showSnackBar(err.message.toString(), context);
+    }
+    setState(() {});
+  }
+
   @override
   Widget build(BuildContext context) {
     final CustomUser user = Provider.of<UserProvider>(context).getUser;
@@ -48,11 +87,12 @@ class _PostCardState extends State<PostCard> {
               const Spacer(),
               PopupMenuButton(
                 itemBuilder: (context) => [
-                  const PopupMenuItem(
-                    child: Text(
+                  PopupMenuItem(
+                    child: const Text(
                       'Delete',
                       style: TextStyle(color: Colors.red),
                     ),
+                    onTap: _deletePost,
                   ),
                   const PopupMenuItem(
                     child: Text(
@@ -60,7 +100,15 @@ class _PostCardState extends State<PostCard> {
                       style: TextStyle(color: Colors.red),
                     ),
                   ),
-                  const PopupMenuItem(child: Text('Share')),
+                  PopupMenuItem(
+                    child: const Text('Share'),
+                    onTap: () async {
+                      await Share.share(
+                        widget.snap['postUrl'],
+                        subject: widget.snap['postUrl'],
+                      );
+                    },
+                  ),
                 ],
               ),
             ],
@@ -86,10 +134,12 @@ class _PostCardState extends State<PostCard> {
                     horizontal: 10,
                   ),
                   height: MediaQuery.of(context).size.height * 0.32,
-                  child: Image(
-                    image: NetworkImage(
-                      widget.snap['postUrl'],
-                    ),
+                  child: CachedNetworkImage(
+                    imageUrl: widget.snap['postUrl'],
+                    placeholder: (context, url) =>
+                        const Center(child: CircularProgressIndicator()),
+                    errorWidget: (context, url, error) =>
+                        const Icon(Icons.error),
                   ),
                 ),
                 AnimatedOpacity(
@@ -158,7 +208,12 @@ class _PostCardState extends State<PostCard> {
               ),
               const SizedBox(width: 10),
               IconButton(
-                onPressed: () {},
+                onPressed: () async {
+                  await Share.share(
+                    widget.snap['postUrl'],
+                    subject: widget.snap['postUrl'],
+                  );
+                },
                 icon: const Icon(
                   Icons.send,
                 ),
@@ -211,9 +266,18 @@ class _PostCardState extends State<PostCard> {
           Align(
             alignment: Alignment.centerLeft,
             child: TextButton(
-              onPressed: () {},
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => CommentScreen(
+                      snap: widget.snap,
+                    ),
+                  ),
+                );
+              },
               child: Text(
-                'View all 300 comments',
+                'View all $commentLength comments',
                 style: const TextStyle(
                   color: secondaryColor,
                 ),

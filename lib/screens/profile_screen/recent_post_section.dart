@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class RecentPostSection extends StatelessWidget {
@@ -13,7 +14,10 @@ class RecentPostSection extends StatelessWidget {
       width: double.infinity,
       height: MediaQuery.of(context).size.width,
       child: StreamBuilder(
-        stream: FirebaseFirestore.instance.collection('post').snapshots(),
+        stream: FirebaseFirestore.instance
+            .collection('post')
+            .where('uid', isEqualTo: FirebaseAuth.instance.currentUser!.uid)
+            .snapshots(),
         builder:
             (context, AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snap) {
           if (snap.connectionState == ConnectionState.waiting) {

@@ -1,16 +1,44 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:instagram_clone/models/users.dart';
+import 'package:instagram_clone/utils/utils.dart';
 
-class ProfileSection extends StatelessWidget {
+class ProfileSection extends StatefulWidget {
   const ProfileSection({
     Key? key,
     required Decoration customDecoration,
-    required this.user,
+    required this.uid,
   })  : _customDecoration = customDecoration,
         super(key: key);
 
   final Decoration _customDecoration;
-  final CustomUser user;
+  final uid;
+
+  @override
+  State<ProfileSection> createState() => _ProfileSectionState();
+}
+
+class _ProfileSectionState extends State<ProfileSection> {
+  Map userData = {};
+  @override
+  void initState() {
+    _getUserDetails();
+    super.initState();
+  }
+
+  _getUserDetails() async {
+    try {
+      DocumentSnapshot postUser = await FirebaseFirestore.instance
+          .collection('users')
+          .doc(widget.uid)
+          .get();
+
+      setState(() {
+        userData = (postUser.data() as Map<String, dynamic>);
+      });
+    } on FirebaseException catch (err) {
+      showSnackBar(err.message.toString(), context);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -21,20 +49,20 @@ class ProfileSection extends StatelessWidget {
       ),
       width: double.infinity,
       height: MediaQuery.of(context).size.height / 4,
-      decoration: _customDecoration,
+      decoration: widget._customDecoration,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Row(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
+              const SizedBox(width: 20),
               CircleAvatar(
                 radius: 45,
-                backgroundImage: NetworkImage(user.imageUrl),
+                backgroundImage: NetworkImage(userData['ImageUrl']),
               ),
-              const SizedBox(width: 20),
               Text(
-                user.username,
+                userData['username'],
                 style: const TextStyle(fontSize: 32),
               ),
               IconButton(

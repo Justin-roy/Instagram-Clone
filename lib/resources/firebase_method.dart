@@ -72,6 +72,7 @@ class FirebaseMethod {
     required String uid,
     required String name,
     required String profilePic,
+    required List likes,
   }) async {
     String res = 'some error occured';
     try {
@@ -90,6 +91,7 @@ class FirebaseMethod {
           'postId': postId,
           'commentId': commentId,
           'datePublished': DateTime.now(),
+          'likes': likes,
         });
       } else {
         res = 'Text is Empty';

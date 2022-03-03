@@ -42,6 +42,7 @@ class _CommentScreenState extends State<CommentScreen> {
               .collection('post')
               .doc(widget.snap['postId'])
               .collection('comment')
+              .orderBy('datePublished', descending: true)
               .snapshots(),
           builder: (context,
               AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snap) {
@@ -55,6 +56,7 @@ class _CommentScreenState extends State<CommentScreen> {
                 itemBuilder: (context, index) {
                   return CommentCard(
                     snap: snap.data!.docs[index].data(),
+                    postID: widget.snap['postId'],
                   );
                 });
           }),
@@ -94,6 +96,7 @@ class _CommentScreenState extends State<CommentScreen> {
                     uid: user.uid,
                     name: user.username,
                     profilePic: user.imageUrl,
+                    likes: [],
                   );
                   _clearCommentText();
                 },
