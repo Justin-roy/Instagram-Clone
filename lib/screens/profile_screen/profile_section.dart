@@ -54,9 +54,8 @@ class _ProfileSectionState extends State<ProfileSection> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Row(
-            mainAxisAlignment: MainAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
-              const SizedBox(width: 20),
               CircleAvatar(
                 radius: 45,
                 backgroundImage: NetworkImage(userData['ImageUrl']),
