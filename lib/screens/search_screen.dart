@@ -39,14 +39,14 @@ class _SearchScreenState extends State<SearchScreen> {
         ),
       ),
       body: _isSearch
-          ? FutureBuilder(
-              future: FirebaseFirestore.instance
+          ? StreamBuilder(
+              stream: FirebaseFirestore.instance
                   .collection('users')
                   .where('username', isGreaterThanOrEqualTo: _controller.text)
-                  .get(),
+                  .snapshots(),
               builder: (context,
                   AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snap) {
-                if (!snap.hasData) {
+                if (snap.connectionState == ConnectionState.waiting) {
                   return const Center(
                     child: CircularProgressIndicator(),
                   );
@@ -60,7 +60,7 @@ class _SearchScreenState extends State<SearchScreen> {
                           context,
                           MaterialPageRoute(
                             builder: (context) => PersonScreen(
-                              userId: snap.data!.docs[index]['uid'],
+                              uid: snap.data!.docs[index]['uid'],
                             ),
                           ),
                         );
@@ -78,10 +78,10 @@ class _SearchScreenState extends State<SearchScreen> {
                 );
               },
             )
-          : FutureBuilder(
-              future: FirebaseFirestore.instance.collection('post').get(),
+          : StreamBuilder(
+              stream: FirebaseFirestore.instance.collection('post').snapshots(),
               builder: (context, snap) {
-                if (!snap.hasData) {
+                if (snap.connectionState == ConnectionState.waiting) {
                   return const Center(
                     child: CircularProgressIndicator(),
                   );
@@ -106,6 +106,22 @@ class _SearchScreenState extends State<SearchScreen> {
                 );
               },
             ),
+      floatingActionButton: _isSearch
+          ? FloatingActionButton(
+              backgroundColor: Colors.red,
+              onPressed: () {
+                _controller.clear();
+                setState(() {
+                  _isSearch = false;
+                });
+              },
+              child: const Icon(
+                Icons.cancel,
+                color: Colors.white,
+                size: 32,
+              ),
+            )
+          : Container(),
     );
   }
 }

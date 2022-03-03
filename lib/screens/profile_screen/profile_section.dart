@@ -1,45 +1,26 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:instagram_clone/utils/utils.dart';
 
 class ProfileSection extends StatefulWidget {
+  final String uid;
+  final bool isFollowOrNot;
   const ProfileSection({
     Key? key,
     required Decoration customDecoration,
+    required this.userData,
     required this.uid,
+    required this.isFollowOrNot,
   })  : _customDecoration = customDecoration,
         super(key: key);
 
   final Decoration _customDecoration;
-  final uid;
+  final Map userData;
 
   @override
   State<ProfileSection> createState() => _ProfileSectionState();
 }
 
 class _ProfileSectionState extends State<ProfileSection> {
-  Map userData = {};
-  @override
-  void initState() {
-    _getUserDetails();
-    super.initState();
-  }
-
-  _getUserDetails() async {
-    try {
-      DocumentSnapshot postUser = await FirebaseFirestore.instance
-          .collection('users')
-          .doc(widget.uid)
-          .get();
-
-      setState(() {
-        userData = (postUser.data() as Map<String, dynamic>);
-      });
-    } on FirebaseException catch (err) {
-      showSnackBar(err.message.toString(), context);
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -51,17 +32,17 @@ class _ProfileSectionState extends State<ProfileSection> {
       height: MediaQuery.of(context).size.height / 4,
       decoration: widget._customDecoration,
       child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.end,
         children: [
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
               CircleAvatar(
                 radius: 45,
-                backgroundImage: NetworkImage(userData['ImageUrl']),
+                backgroundImage: NetworkImage(widget.userData['ImageUrl']),
               ),
               Text(
-                userData['username'],
+                widget.userData['username'],
                 style: const TextStyle(fontSize: 32),
               ),
               IconButton(
@@ -73,22 +54,67 @@ class _ProfileSectionState extends State<ProfileSection> {
               ),
             ],
           ),
-          Container(
-            width: 200,
-            height: 46,
-            decoration: BoxDecoration(
-              border: Border.all(color: Colors.grey),
-              borderRadius: BorderRadius.circular(15),
-            ),
-            child: const Center(
-              child: Text(
-                'Edit Profile',
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            ),
-          ),
+          const Spacer(),
+          FirebaseAuth.instance.currentUser!.uid == widget.uid
+              ? InkWell(
+                  onTap: () {},
+                  child: Container(
+                    width: 200,
+                    height: 46,
+                    decoration: BoxDecoration(
+                      border: Border.all(color: Colors.grey),
+                      borderRadius: BorderRadius.circular(15),
+                    ),
+                    child: const Center(
+                      child: Text(
+                        'Edit Profile',
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                  ),
+                )
+              : widget.isFollowOrNot
+                  ? InkWell(
+                      onTap: () {},
+                      child: Container(
+                        width: 200,
+                        height: 46,
+                        decoration: BoxDecoration(
+                          color: Colors.blue,
+                          borderRadius: BorderRadius.circular(15),
+                        ),
+                        child: const Center(
+                          child: Text(
+                            'Unfollow',
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                      ),
+                    )
+                  : InkWell(
+                      onTap: () {},
+                      child: Container(
+                        width: 200,
+                        height: 46,
+                        decoration: BoxDecoration(
+                          color: Colors.blue,
+                          borderRadius: BorderRadius.circular(15),
+                        ),
+                        child: const Center(
+                          child: Text(
+                            'Follow',
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+          const Spacer(),
         ],
       ),
     );

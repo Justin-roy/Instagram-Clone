@@ -13,6 +13,6 @@ List<Widget> homeScreenItems = [
   const AddPostScreen(),
   const Text('Favourite'),
   PersonScreen(
-    userId: FirebaseAuth.instance.currentUser!.uid,
+    uid: FirebaseAuth.instance.currentUser!.uid,
   ),
 ];

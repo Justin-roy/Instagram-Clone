@@ -1,11 +1,12 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class RecentPostSection extends StatelessWidget {
+  final String uid;
   const RecentPostSection({
     Key? key,
+    required this.uid,
   }) : super(key: key);
 
   @override
@@ -16,7 +17,7 @@ class RecentPostSection extends StatelessWidget {
       child: StreamBuilder(
         stream: FirebaseFirestore.instance
             .collection('post')
-            .where('uid', isEqualTo: FirebaseAuth.instance.currentUser!.uid)
+            .where('uid', isEqualTo: uid)
             .snapshots(),
         builder:
             (context, AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snap) {
@@ -29,16 +30,20 @@ class RecentPostSection extends StatelessWidget {
           return GridView.builder(
             itemCount: snap.data!.docs.length,
             gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 2,
-              mainAxisSpacing: 10,
-              crossAxisSpacing: 10,
+              crossAxisCount: 3,
+              mainAxisSpacing: 8,
+              crossAxisSpacing: 8,
+              childAspectRatio: 1,
             ),
             itemBuilder: (BuildContext context, int index) {
-              return CachedNetworkImage(
-                imageUrl: snap.data!.docs[index].data()['postUrl'],
-                placeholder: (context, url) =>
-                    const Center(child: CircularProgressIndicator()),
-                errorWidget: (context, url, error) => const Icon(Icons.error),
+              return SizedBox(
+                child: CachedNetworkImage(
+                  imageUrl: snap.data!.docs[index].data()['postUrl'],
+                  placeholder: (context, url) =>
+                      const Center(child: CircularProgressIndicator()),
+                  errorWidget: (context, url, error) => const Icon(Icons.error),
+                  fit: BoxFit.cover,
+                ),
               );
             },
           );

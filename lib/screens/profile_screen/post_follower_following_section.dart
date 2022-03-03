@@ -2,9 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:instagram_clone/Widgets/post_follower_following.dart';
 
 class PostFollowerFollowingSection extends StatelessWidget {
+  final int postLength;
+  final int followingLength;
+  final int followerLength;
   const PostFollowerFollowingSection({
     Key? key,
     required Decoration customDecoration,
+    required this.postLength,
+    required this.followerLength,
+    required this.followingLength,
   })  : _customDecoration = customDecoration,
         super(key: key);
 
@@ -18,18 +24,18 @@ class PostFollowerFollowingSection extends StatelessWidget {
       decoration: _customDecoration,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: const [
+        children: [
           PostFollowerFollowing(
             value: 'post',
-            valueCount: 18,
+            valueCount: postLength,
           ),
           PostFollowerFollowing(
             value: 'followers',
-            valueCount: 189,
+            valueCount: followerLength,
           ),
           PostFollowerFollowing(
             value: 'following',
-            valueCount: 218,
+            valueCount: followingLength,
           ),
         ],
       ),
