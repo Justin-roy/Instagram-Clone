@@ -7,12 +7,13 @@ A new Flutter project.
 2. Email & Password Authentication
 3. Share Posts with Caption
 4. Display Posts with Caption
-5. Like & Comment on Posts
-6. Search Users
-7. Follow Users
-8. Display User Posts, Followers & Following
-9. EVERYTHING REAL TIME
-10. Sign Out
+5. Delete Post & Comment
+6. Like & Comment on Posts
+7. Search Users
+8. Follow Users
+9. Display User Posts, Followers & Following
+10. EVERYTHING REAL TIME
+11. Sign Out
 
 ## Getting Started
 
