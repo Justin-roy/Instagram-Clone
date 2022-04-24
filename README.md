@@ -26,17 +26,9 @@ https://user-images.githubusercontent.com/69432186/164960965-c549bf64-f33a-4463-
 # Sample Images
 
 <img width="300" src="https://github.com/Justin-roy/Intagram-Clone/blob/master/screenshots/1.jpg">      .
-
-
 <img width="300" src="https://github.com/Justin-roy/Intagram-Clone/blob/master/screenshots/2.jpg">      .
-
-
 <img width="300" src="https://github.com/Justin-roy/Intagram-Clone/blob/master/screenshots/3.jpg">      .
-
-
 <img width="300" src="https://github.com/Justin-roy/Intagram-Clone/blob/master/screenshots/4.jpg">      .
-
-
 <img width="300" src="https://github.com/Justin-roy/Intagram-Clone/blob/master/screenshots/5.jpg">     
 
 ## Getting Started
