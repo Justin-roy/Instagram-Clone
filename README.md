@@ -15,6 +15,13 @@ A new Flutter project.
 10. EVERYTHING REAL TIME
 11. Sign Out
 
+# Sample Video
+
+
+https://user-images.githubusercontent.com/69432186/164960965-c549bf64-f33a-4463-b2b5-f7984e370f2b.mp4
+
+
+
 
 # Sample Images
 
