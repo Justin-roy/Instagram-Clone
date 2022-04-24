@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:instagram_clone/resources/firebase_method.dart';
 
 class ProfileSection extends StatefulWidget {
   final String uid;
@@ -77,7 +78,12 @@ class _ProfileSectionState extends State<ProfileSection> {
                 )
               : widget.isFollowOrNot
                   ? InkWell(
-                      onTap: () {},
+                      onTap: () async {
+                        FirebaseMethod().followUsers(
+                          uid: FirebaseAuth.instance.currentUser!.uid,
+                          followId: widget.userData['uid'],
+                        );
+                      },
                       child: Container(
                         width: 200,
                         height: 46,
@@ -96,7 +102,12 @@ class _ProfileSectionState extends State<ProfileSection> {
                       ),
                     )
                   : InkWell(
-                      onTap: () {},
+                      onTap: () async {
+                        FirebaseMethod().followUsers(
+                          uid: FirebaseAuth.instance.currentUser!.uid,
+                          followId: widget.userData['uid'],
+                        );
+                      },
                       child: Container(
                         width: 200,
                         height: 46,
