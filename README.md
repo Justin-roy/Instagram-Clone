@@ -1,6 +1,19 @@
-# instagram_clone
+# Onstagram Clone
 
 A new Flutter project.
+
+# Features
+1. Responsive Instagram UI
+2. Email & Password Authentication
+3. Share Posts with Caption
+4. Display Posts with Caption
+5. Delete Post & Comment
+6. Like & Comment on Posts
+7. Search Users
+8. Follow Users
+9. Display User Posts, Followers & Following
+10. EVERYTHING REAL TIME
+11. Sign Out
 
 ## Getting Started
 
