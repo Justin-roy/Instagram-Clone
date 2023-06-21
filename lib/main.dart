@@ -45,7 +45,8 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Instagram Clone',
       theme: ThemeData.dark().copyWith(
-        scaffoldBackgroundColor: mobileBackgroundColor,
+        scaffoldBackgroundColor:
+            kIsWeb ? webBackgroundColor : mobileBackgroundColor,
         appBarTheme: const AppBarTheme(
           centerTitle: true,
         ),
@@ -82,4 +83,3 @@ class MyApp extends StatelessWidget {
     );
   }
 }
- 

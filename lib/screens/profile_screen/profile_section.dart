@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:instagram_clone/Widgets/signOut.dart';
 import 'package:instagram_clone/resources/firebase_method.dart';
 
 class ProfileSection extends StatefulWidget {
@@ -47,7 +48,12 @@ class _ProfileSectionState extends State<ProfileSection> {
                 style: const TextStyle(fontSize: 32),
               ),
               IconButton(
-                onPressed: () {},
+                onPressed: () async {
+                  showDialog(
+                    context: context,
+                    builder: (ctx) => alertSignOutBox(context),
+                  );
+                },
                 icon: const Icon(
                   Icons.settings_outlined,
                   size: 32,
